@@ -1634,6 +1634,12 @@ impl MemoryInterface<ArmError> for StLinkMemoryInterface<'_> {
     fn write_64(&mut self, address: u64, data: &[u64]) -> Result<(), ArmError> {
         let address = valid_32bit_arm_address(address)?;
 
+        // The interface requires the data phase to be non-empty; just return
+        // success for empty data.
+        if data.is_empty() {
+            return Ok(());
+        }
+
         let mut tx_buffer = vec![0u8; data.len() * 8];
 
         let mut offset = 0;
@@ -1658,6 +1664,12 @@ impl MemoryInterface<ArmError> for StLinkMemoryInterface<'_> {
     fn write_32(&mut self, address: u64, data: &[u32]) -> Result<(), ArmError> {
         let address = valid_32bit_arm_address(address)?;
 
+        // The interface requires the data phase to be non-empty; just return
+        // success for empty data.
+        if data.is_empty() {
+            return Ok(());
+        }
+
         let mut tx_buffer = vec![0u8; data.len() * 4];
 
         let mut offset = 0;
@@ -1681,6 +1693,12 @@ impl MemoryInterface<ArmError> for StLinkMemoryInterface<'_> {
 
     fn write_16(&mut self, address: u64, data: &[u16]) -> Result<(), ArmError> {
         let address = valid_32bit_arm_address(address)?;
+
+        // The interface requires the data phase to be non-empty; just return
+        // success for empty data.
+        if data.is_empty() {
+            return Ok(());
+        }
 
         let mut tx_buffer = vec![0u8; data.len() * 2];
 
@@ -1712,6 +1730,12 @@ impl MemoryInterface<ArmError> for StLinkMemoryInterface<'_> {
 
     fn write_8(&mut self, address: u64, data: &[u8]) -> Result<(), ArmError> {
         let address = valid_32bit_arm_address(address)?;
+
+        // The interface requires the data phase to be non-empty; just return
+        // success for empty data.
+        if data.is_empty() {
+            return Ok(());
+        }
 
         // The underlying STLink command is limited to a single USB frame at a time
         // so we must manually chunk it into multiple command if it exceeds
