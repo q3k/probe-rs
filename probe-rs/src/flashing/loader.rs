@@ -503,6 +503,7 @@ impl FlashLoader {
         // Iterate all flash algorithms we need to use and do the flashing.
         for el in algos {
             let mut flasher = el.flasher;
+            flasher.prepare_core = options.prepare_core.clone();
             tracing::debug!("Flashing ranges for algo: {}", flasher.flash_algorithm.name);
 
             if do_chip_erase {
@@ -722,7 +723,7 @@ impl FlashLoader {
                 entry.regions.push(region);
             } else {
                 algos.push(FlasherWithRegions {
-                    flasher: Flasher::new(target, core, algo)?,
+                    flasher: Flasher::new(target, core, None, algo)?,
                     regions: vec![region],
                 });
             }
